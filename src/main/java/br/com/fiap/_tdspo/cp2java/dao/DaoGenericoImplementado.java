@@ -9,7 +9,7 @@ public class DaoGenericoImplementado<T,K> implements DaoGenerico<T,K> {
     private EntityManager em;
     private Class<T> clazz;
 
-    public DaoGenericoImplementado(EntityManager em, Class<T> clazz) {
+    public DaoGenericoImplementado(EntityManager em) {
         this.em = em;
         this.clazz = (Class<T>) ((ParameterizedType)
                                 getClass().getGenericSuperclass()).getActualTypeArguments()[0];
