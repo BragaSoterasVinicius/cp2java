@@ -1,4 +1,6 @@
 package br.com.fiap._tdspo.cp2java.dao;
 
-public interface BrinquedoDao {
+import br.com.fiap._tdspo.cp2java.entity.Brinquedo;
+
+public interface BrinquedoDao extends DaoGenerico<Brinquedo, Integer> {
 }
