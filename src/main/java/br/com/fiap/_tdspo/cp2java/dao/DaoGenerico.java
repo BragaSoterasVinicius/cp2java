@@ -7,5 +7,7 @@ public interface DaoGenerico <T, K>{
 
     T buscar(K id);
 
+    java.util.List<T> listar();
+
     void commit();
 }

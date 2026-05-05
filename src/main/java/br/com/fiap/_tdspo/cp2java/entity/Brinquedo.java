@@ -10,22 +10,85 @@ import java.math.BigDecimal;
 @Table(name="TDS_TB_Brinquedos")
 public class Brinquedo {
     @Id
-    @Column(name="cd_brinquedo")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TDS_TB_Brinquedos")
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brinquedo_seq")
+    @SequenceGenerator(name = "brinquedo_seq", sequenceName = "TDS_SEQ_BRINQUEDOS", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "nm_brinquedo", nullable = false, length = 80)
+    @Column(name = "nome", nullable = false, length = 80)
     private String nome;
 
-    @Column(name = "tipo_brinquedo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", nullable = false, length = 30)
     private EnumBrinquedo tipo;
 
-    @Column(name = "Classificacao", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "classificacao", nullable = false, length = 30)
     private EnumClassific classificacao;
 
-    @Column(name = "Tamanho", nullable = false)
+    @Column(name = "tamanho", nullable = false)
     private Integer tamanho;
 
-    @Column(name = "Preco", nullable = false)
+    @Column(name = "preco", nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
+
+    public Brinquedo() {
+    }
+
+    public Brinquedo(Integer id, String nome, EnumBrinquedo tipo, EnumClassific classificacao, Integer tamanho, BigDecimal preco) {
+        this.id = id;
+        this.nome = nome;
+        this.tipo = tipo;
+        this.classificacao = classificacao;
+        this.tamanho = tamanho;
+        this.preco = preco;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public EnumBrinquedo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(EnumBrinquedo tipo) {
+        this.tipo = tipo;
+    }
+
+    public EnumClassific getClassificacao() {
+        return classificacao;
+    }
+
+    public void setClassificacao(EnumClassific classificacao) {
+        this.classificacao = classificacao;
+    }
+
+    public Integer getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(Integer tamanho) {
+        this.tamanho = tamanho;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
 }

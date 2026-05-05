@@ -1,9 +1,9 @@
 package br.com.fiap._tdspo.cp2java.dao;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public class DaoGenericoImplementado<T,K> implements DaoGenerico<T,K> {
     private EntityManager em;
@@ -15,25 +15,55 @@ public class DaoGenericoImplementado<T,K> implements DaoGenerico<T,K> {
                                 getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
     public T salvar(T entidade) {
-        return em.merge(entidade);
+        try {
+            em.getTransaction().begin();
+            T entidadeSalva = em.merge(entidade);
+            em.getTransaction().commit();
+            return entidadeSalva;
+        } catch(Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }
     }
 
     public void remover(K id) {
-        T entidade = buscar(id);
-        em.remove(entidade);
+        try {
+            em.getTransaction().begin();
+            T entidade = buscar(id);
+            if (entidade != null) {
+                em.remove(entidade);
+            }
+            em.getTransaction().commit();
+        } catch(Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }
     }
 
     public T buscar(K id) {
         T entidade = em.find(clazz, id);
         return entidade;
     }
+
+    public List<T> listar() {
+        String jpql = "from " + clazz.getSimpleName();
+        return em.createQuery(jpql, clazz).getResultList();
+    }
+
     public void commit() {
         try {
-            em.getTransaction().begin();
-            em.getTransaction().commit();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().commit();
+            }
         } catch(Exception e) {
             e.printStackTrace();
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
     }
 
