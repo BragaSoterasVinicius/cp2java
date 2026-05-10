@@ -2,6 +2,7 @@ package br.com.fiap._tdspo.cp2java.controller;
 
 import br.com.fiap._tdspo.cp2java.dao.BrinquedoDao;
 import br.com.fiap._tdspo.cp2java.dao.BrinquedoDaoImpl;
+import br.com.fiap._tdspo.cp2java.dto.BrinquedoDto;
 import br.com.fiap._tdspo.cp2java.entity.Brinquedo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
@@ -36,16 +37,28 @@ public class BrinquedoController {
 
     @PostMapping()
     public Brinquedo createBrinquedo(
-            @RequestBody Brinquedo brinquedoDto){
-        return dao.salvar(brinquedoDto);
+            @RequestBody BrinquedoDto brinquedoDto){
+        return dao.salvar(brinquedoDto.convertToBrinquedo());
     }
 
     @PutMapping()
     public Brinquedo updateBrinquedo(
-            @PathVariable String id,
-            @RequestBody Brinquedo brinquedoDto
+            @PathVariable Integer id,
+            @RequestBody BrinquedoDto brinquedoDto
     ){
-        return dao.salvar(brinquedoDto);
+        Brinquedo brinquedoExistente = dao.buscar(id);
+
+        if(brinquedoExistente == null){
+            return null;
+        }
+
+        brinquedoExistente.setNome(brinquedoDto.getNome());
+        brinquedoExistente.setTipo(brinquedoDto.getTipo());
+        brinquedoExistente.setClassificacao(brinquedoDto.getClassificacao());
+        brinquedoExistente.setTamanho(brinquedoDto.getTamanho());
+        brinquedoExistente.setPreco(brinquedoDto.getPreco());
+
+        return dao.salvar(brinquedoExistente);
     }
 
     @DeleteMapping("/{id}")
