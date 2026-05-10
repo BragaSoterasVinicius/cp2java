@@ -4,6 +4,7 @@ import br.com.fiap._tdspo.cp2java.dao.BrinquedoDao;
 import br.com.fiap._tdspo.cp2java.dao.BrinquedoDaoImpl;
 import br.com.fiap._tdspo.cp2java.dto.BrinquedoDto;
 import br.com.fiap._tdspo.cp2java.entity.Brinquedo;
+import br.com.fiap._tdspo.cp2java.singleton.EntityManagerFactorySingleton;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,7 @@ public class BrinquedoController {
     private BrinquedoDao dao;
 
     public BrinquedoController() {
-        em = Persistence
-                .createEntityManagerFactory("TDSPOPU")
-                .createEntityManager();
+        em = EntityManagerFactorySingleton.getInstance().createEntityManager();
 
         dao = new BrinquedoDaoImpl(em);
     }
@@ -41,7 +40,7 @@ public class BrinquedoController {
         return dao.salvar(brinquedoDto.convertToBrinquedo());
     }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     public Brinquedo updateBrinquedo(
             @PathVariable Integer id,
             @RequestBody BrinquedoDto brinquedoDto
